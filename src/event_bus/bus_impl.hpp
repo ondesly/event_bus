@@ -62,8 +62,9 @@ namespace ev {
             std::swap(events_to_dispatch, m_events_to_dispatch);
 
             for (const auto &[event_id, event] : events_to_dispatch) {
-                const auto &holder = m_listeners[event_id];
-                holder->dispacth(event);
+                if (const auto &holder = m_listeners[event_id]) {
+                    holder->dispacth(event);
+                }
             }
         }
 
