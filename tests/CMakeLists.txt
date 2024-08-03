@@ -19,3 +19,8 @@ function(add name)
 
     add_test(NAME ${name} COMMAND ${name})
 endfunction()
+
+#
+
+add("test_bus")
+add("test_inner")
