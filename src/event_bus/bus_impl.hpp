@@ -22,6 +22,8 @@ namespace ev {
     public:
         template <class Event>
         std::unique_ptr<listener> listen(std::function<void(const Event &)> &&callback) {
+            static_assert(is_event_valid<Event>(), "invalid event");
+
             const auto listener_id = new_listener_id();
             const auto event_id = get_event_id<Event>();
 
@@ -37,6 +39,8 @@ namespace ev {
 
         template <class Event>
         void dispatch(Event event) {
+            static_assert(is_event_valid<Event>(), "invalid event");
+
             const auto event_id = get_event_id<Event>();
             m_events_to_dispatch.emplace_back(event_id, std::move(event));
         }
