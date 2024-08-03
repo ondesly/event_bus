@@ -24,3 +24,18 @@ endfunction()
 
 add("test_bus")
 add("test_inner")
+
+if ("${CMAKE_BUILD_TYPE}" STREQUAL "Release")
+    include(FetchContent)
+    FetchContent_Declare(
+            event_bus
+            GIT_REPOSITORY https://github.com/gelldur/EventBus.git
+            GIT_TAG v3.1.2
+            GIT_SHALLOW TRUE
+            GIT_PROGRESS TRUE)
+
+    FetchContent_MakeAvailable(event_bus)
+
+    add("test_performance")
+    target_link_libraries(test_performance EventBus)
+endif ()
