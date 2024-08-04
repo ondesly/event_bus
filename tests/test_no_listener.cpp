@@ -14,5 +14,8 @@ int main() {
     ev::bus{}.dispatch(event_t{});
     ev::bus{}.process();
 
+    ev::bus{}.listen([](const event_t &) {});
+    ev::bus{}.process();
+
     return 0;
 }
