@@ -25,6 +25,7 @@ endfunction()
 add("test_bus")
 add("test_inner")
 add("test_no_listener")
+add("test_instant_dispatch")
 
 if ("${CMAKE_BUILD_TYPE}" STREQUAL "Release")
     include(FetchContent)

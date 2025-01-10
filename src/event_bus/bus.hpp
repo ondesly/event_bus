@@ -32,6 +32,11 @@ namespace ev {
             m_bus->dispatch(std::move(event));
         }
 
+        template <class Event>
+        void dispatch_instantly(Event event) const {
+            m_bus->dispatch_instantly(std::move(event));
+        }
+
         void process() const { m_bus->process(); }
 
     private:

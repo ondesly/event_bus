@@ -46,6 +46,16 @@ namespace ev {
         }
 
         template <class Event>
+        void dispatch_instantly(Event event) {
+            static_assert(is_event_valid<Event>(), "invalid event");
+
+            const auto event_id = get_event_id<Event>();
+            if (const auto it = m_listeners.find(event_id); it != m_listeners.end()) {
+                it->second->dispacth(event);
+            }
+        }
+
+        template <class Event>
         void ensure_holder(const event_id_t event_id) {
             if (m_listeners.count(event_id)) {
                 return;
