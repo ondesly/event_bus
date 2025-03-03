@@ -37,5 +37,13 @@ int main() {
         assert(values == reference);
     }
 
+    listener.reset();
+    ev::bus{}.dispatch_instantly(event_t{15});
+
+    {
+        const std::vector<int> reference{10, 5};
+        assert(values == reference);
+    }
+
     return 0;
 }

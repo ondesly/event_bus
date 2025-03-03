@@ -35,6 +35,9 @@ namespace ev {
 
         void unlisten(const listener_id_t listener_id, const event_id_t event_id) {
             m_listeners_to_remove.emplace_back(listener_id, event_id);
+            if (const auto it = m_listeners.find(event_id); it != m_listeners.end()) {
+                it->second->clear_listener(listener_id);
+            }
         }
 
         template <class Event>
