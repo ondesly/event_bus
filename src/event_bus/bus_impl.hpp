@@ -51,7 +51,7 @@ namespace ev {
 
             const auto event_id = get_event_id<Event>();
             if (const auto it = m_listeners.find(event_id); it != m_listeners.end()) {
-                it->second->dispacth(event);
+                it->second->dispatch(event);
             }
         }
 
@@ -73,7 +73,7 @@ namespace ev {
 
             for (const auto &[event_id, event] : events_to_dispatch) {
                 if (const auto it = m_listeners.find(event_id); it != m_listeners.end()) {
-                    it->second->dispacth(event);
+                    it->second->dispatch(event);
                 }
             }
         }

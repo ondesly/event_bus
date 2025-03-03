@@ -20,7 +20,7 @@ namespace ev {
         virtual ~holder_i() = default;
         virtual void add_listener(listener_id_t listener_id, std::any callback) = 0;
         virtual void remove_listener(listener_id_t listener_id) = 0;
-        virtual void dispacth(const std::any &event) = 0;
+        virtual void dispatch(const std::any &event) = 0;
     };
 
     template <class Event>
@@ -35,7 +35,7 @@ namespace ev {
 
         void remove_listener(listener_id_t listener_id) override { m_listeners.erase(listener_id); }
 
-        void dispacth(const std::any &any_event) override {
+        void dispatch(const std::any &any_event) override {
             const auto &event = std::any_cast<Event>(any_event);
             for (const auto &[_, callback] : m_listeners) {
                 callback(event);
