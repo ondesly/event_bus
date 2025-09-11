@@ -15,10 +15,7 @@ let package = Package(
             sources: [
                 "event_bus/bus.cpp"
             ],
-            publicHeadersPath: "event_bus",
-            cSettings: [
-                .headerSearchPath("src"),
-            ]
+            publicHeadersPath: "."
         )
     ],
     cxxLanguageStandard: .cxx17
