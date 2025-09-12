@@ -13,7 +13,8 @@ let package = Package(
             name: "c_event_bus",
             path: "src",
             sources: [
-                "event_bus/bus.cpp"
+                "event_bus/bus.cpp",
+                "event_bus/listener.cpp"
             ],
             publicHeadersPath: "."
         )
