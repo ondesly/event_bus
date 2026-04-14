@@ -33,6 +33,11 @@ namespace ev {
         }
 
         template <class Event>
+        void dispatch_thread_safe(Event event) const {
+            m_bus->dispatch_thread_safe(std::move(event));
+        }
+
+        template <class Event>
         void dispatch_instantly(Event event) const {
             m_bus->dispatch_instantly(std::move(event));
         }

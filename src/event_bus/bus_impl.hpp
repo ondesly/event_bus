@@ -10,6 +10,7 @@
 
 #include <functional>
 #include <memory>
+#include <mutex>
 #include <unordered_map>
 #include <vector>
 
@@ -49,6 +50,16 @@ namespace ev {
         }
 
         template <class Event>
+        void dispatch_thread_safe(Event event) {
+            static_assert(is_event_valid<Event>(), "invalid event");
+
+            const auto event_id = get_event_id<Event>();
+
+            std::lock_guard lock(m_events_to_dispatch_mutex);
+            m_thread_safe_events_to_dispatch.emplace_back(event_id, std::move(event));
+        }
+
+        template <class Event>
         void dispatch_instantly(Event event) {
             static_assert(is_event_valid<Event>(), "invalid event");
 
@@ -79,6 +90,22 @@ namespace ev {
                     it->second->dispatch(event);
                 }
             }
+
+            if (!m_thread_safe_events_to_dispatch.empty()) {
+                std::vector<std::tuple<event_id_t, std::any>> thread_safe_events_to_dispatch;
+
+                {
+                    std::lock_guard lock(m_events_to_dispatch_mutex);
+                    thread_safe_events_to_dispatch.reserve(m_thread_safe_events_to_dispatch.size());
+                    std::swap(thread_safe_events_to_dispatch, m_thread_safe_events_to_dispatch);
+                }
+
+                for (const auto &[event_id, event] : thread_safe_events_to_dispatch) {
+                    if (const auto it = m_listeners.find(event_id); it != m_listeners.end()) {
+                        it->second->dispatch(event);
+                    }
+                }
+            }
         }
 
     private:
@@ -86,7 +113,9 @@ namespace ev {
 
         std::unordered_map<event_id_t, std::unique_ptr<holder_i>> m_listeners;
 
+        std::mutex m_events_to_dispatch_mutex;
         std::vector<std::tuple<event_id_t, std::any>> m_events_to_dispatch;
+        std::vector<std::tuple<event_id_t, std::any>> m_thread_safe_events_to_dispatch;
         std::vector<std::tuple<listener_id_t, event_id_t, std::any>> m_listeners_to_add;
         std::vector<std::tuple<listener_id_t, event_id_t>> m_listeners_to_remove;
 

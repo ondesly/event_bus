@@ -18,7 +18,9 @@ auto listener = ev::bus{}.listen([](const event_t &event) {
 
 3. Dispatch event
 ```cpp
-ev::bus{}.dispatch(event_t{5});
+ev::bus{}.dispatch(event_t{5}); // by default
+ev::bus{}.dispatch_thread_safe(event_t{5}); // can be called from concurrent threads
+ev::bus{}.dispatch_instantly(event_t{5}); // without waiting for the process call
 ```
 
 4. Process changes
